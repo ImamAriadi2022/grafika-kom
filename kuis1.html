@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Kuis 1 - Persamaan Misteri</title>
+    <style>
+        body { 
+            display: flex; justify-content: center; align-items: center; 
+            height: 100vh; background-color: #222; margin: 0;
+        }
+        canvas { 
+            background-color: white; 
+            box-shadow: 0 0 15px rgba(255,255,255,0.2); 
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="layarKomp" width="500" height="500"></canvas>
+
+    <script>
+        // 0) INISIALISASI: Ambil elemen canvas dan context 2D untuk menggambar
+        const canvas = document.getElementById("layarKomp");
+        const ctx = canvas.getContext("2d");
+
+        // 1) KONFIGURASI DASAR: Ukuran canvas dan faktor skala ke koordinat matematika
+        const width = canvas.width;
+        const height = canvas.height;
+        const scale = 100; // Skala pembesaran, karena nilai x dan y di rumus sangat kecil (sekitar -2 sampai 2)
+
+        // 2) TRANSFORMASI KOORDINAT: Memindahkan titik pusat (0,0) dari pojok kiri atas ke tengah layar
+        ctx.translate(width / 2, height / 2);
+
+        // 3) STYLING GAMBAR: Menentukan warna bentuk
+        ctx.fillStyle = "red";
+
+        // 4) SCANNING PIXEL: Mengecek setiap titik koordinat pada canvas
+        for (let screenX = -width / 2; screenX < width / 2; screenX++) {
+            for (let screenY = -height / 2; screenY < height / 2; screenY++) {
+                
+                // 4.1 MAPPING: Konversi koordinat layar (pixel) ke koordinat kartesius matematika
+                let x = screenX / scale;
+                let y = -screenY / scale; // Ingat! Sumbu Y pada komputer kebalikan dari matematika
+                
+                // 4.2 HITUNG PERSAMAAN MISTERI
+                // Persamaan: (x^2 + y^2 - 1)^3 = x^2 * y^3
+                let sisiKiri = Math.pow(x * x + y * y - 1, 3);
+                let sisiKanan = x * x * y * y * y;
+
+                // 4.3 LOGIKA PENGGAMBARAN
+                if (sisiKiri <= sisiKanan) {
+                    // 4.4 RENDER: Menggambar 1 titik (pixel) di koordinat layar
+                    ctx.fillRect(screenX, screenY, 1, 1);
+                }
+            }
+        }
+    </script>
+</body>
+</html>
